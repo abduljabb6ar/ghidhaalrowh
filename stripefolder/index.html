@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>stripe payment</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js" defer></script>
+    <!-- ... -->
+    <style>
+        .orange-button {
+          display: block;
+          width: 100%;
+          padding: 5px;
+          background-color: orange;
+          color: white;
+          border: none;
+          padding: 15px;
+          font-size: 16px;
+          cursor: pointer;
+          text-align: center;
+          text-decoration: none;
+        }
+        .orange-button:hover {
+          background-color: darkorange;
+        }
+      </style>
+</head>
+<body>
+
+    <div id="payment-element"></div>
+    <button id="pay-now-btn" >pay now</button>
+   
+
+    <script>
+        const strip=Stripe("pk_live_51PH8WNRuwavbbFPHVuOAlSLr7oi1KGb8e7pZpTTyDhVxAjxZwxTBK6lFT7ery4KtizODwFUHUZQa58EZbGAkPZsC00Q3lYaF7r");
+        const elements=strip.elements(
+            {
+                clientSecret:"pi_3PeJ49RuwavbbFPH1v6MYbap_secret_3Nj03U9zBwkgQ9Z8qN0wBK8iY"
+            }
+        )
+
+        const paymentelement=elements.create('payment');
+        paymentelement.mount("#payment-element");
+        document.getElementById("pay-now-btn").addEventListener("click",async()=>{
+            await strip.confirmPayment(
+                {
+                    elements,
+                    confirmParams:{
+                        return_url:"https://ghidhaalruwh.netlify.app/#MainPage"
+                    },
+                }
+            ).then((data)=>{
+                console.log(data);
+            }).catch((error)=>{
+                console.log(error);
+            });
+        });
+        console.log(elements);
+    
+    </script>
+</body>
+</html>
